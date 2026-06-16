@@ -1,0 +1,24 @@
+[Unit]
+Description=Argorant Public MCP Server
+After=network.target palmstone-api.service
+Wants=palmstone-api.service
+
+[Service]
+Type=simple
+User=root
+WorkingDirectory=/opt/argorant-public-mcp
+EnvironmentFile=/etc/palmstone/argorant-mcp-bridge.env
+Environment=MCP_PUBLIC_BASE_URL=https://mcp.argorant.com
+Environment=MCP_HOST=127.0.0.1
+Environment=MCP_PORT=8012
+Environment=ARGORANT_BACKEND_BASE_URL=http://127.0.0.1:8000
+Environment=ARGORANT_BACKEND_PUBLIC_URL=https://argorant.com
+Environment=MCP_DATABASE_URL=sqlite:////opt/argorant-public-mcp/data/mcp.db
+ExecStart=/opt/argorant-public-mcp/venv/bin/uvicorn argorant_mcp.app:app --host 127.0.0.1 --port 8012
+Restart=always
+RestartSec=5
+StandardOutput=append:/data/palmstone-db/logs/argorant-public-mcp.log
+StandardError=append:/data/palmstone-db/logs/argorant-public-mcp.log
+
+[Install]
+WantedBy=multi-user.target

@@ -32,11 +32,13 @@ def _filters(
     has_phone: Optional[bool],
     has_linkedin: Optional[bool],
     verified_only: bool,
-    email_verification_status: Optional[str] = None,
     geography: Optional[str] = None,
     exclude_title: Optional[str] = None,
 ) -> Dict[str, Any]:
-    status = email_verification_status or ("valid" if verified_only else None)
+    # Verification status is never a public/queryable filter (it would expose data
+    # quality / invalid volumes). Only positive "verified_only" intent is honored;
+    # actual verification happens live at reveal/export and only valid is billed.
+    status = "valid" if verified_only else None
     return {
         "q": q,
         "title": title,
@@ -278,12 +280,11 @@ def register(mcp) -> None:
         has_phone: Optional[bool] = None,
         has_linkedin: Optional[bool] = None,
         verified_only: bool = False,
-        email_verification_status: Optional[str] = None,
     ) -> Dict[str, Any]:
         ident = current_identity()
         filters = _filters(q, title, seniority, departments, company_name, company_domain, industry,
                            city, state, country, has_email, has_phone, has_linkedin, verified_only,
-                           email_verification_status, geography=geography, exclude_title=exclude_title)
+                           geography=geography, exclude_title=exclude_title)
         try:
             return await backend_call(ident["product_credential"], lambda client: client.people_count(filters))
         except ToolError as exc:
@@ -315,14 +316,13 @@ def register(mcp) -> None:
         has_phone: Optional[bool] = None,
         has_linkedin: Optional[bool] = None,
         verified_only: bool = False,
-        email_verification_status: Optional[str] = None,
         limit: int = 5,
     ) -> Dict[str, Any]:
         ident = current_identity()
         safe_limit = max(1, min(int(limit or 5), settings.owner_max_preview))
         filters = _filters(q, title, seniority, departments, company_name, company_domain, industry,
                            city, state, country, has_email, has_phone, has_linkedin, verified_only,
-                           email_verification_status, geography=geography, exclude_title=exclude_title)
+                           geography=geography, exclude_title=exclude_title)
         try:
             return await backend_call(ident["product_credential"], lambda client: client.people_preview(filters, safe_limit))
         except ToolError as exc:
@@ -353,14 +353,13 @@ def register(mcp) -> None:
         has_phone: Optional[bool] = None,
         has_linkedin: Optional[bool] = None,
         verified_only: bool = False,
-        email_verification_status: Optional[str] = None,
         limit: int = 10,
     ) -> Dict[str, Any]:
         ident = current_identity()
         safe_limit = max(1, min(int(limit or 10), 100))
         filters = _filters(q, title, seniority, departments, company_name, company_domain, industry,
                            city, state, country, True, has_phone, has_linkedin, verified_only,
-                           email_verification_status, geography=geography, exclude_title=exclude_title)
+                           geography=geography, exclude_title=exclude_title)
         try:
             return await backend_call(ident["product_credential"], lambda client: client.people_reveal(filters, safe_limit))
         except ToolError as exc:
@@ -392,7 +391,6 @@ def register(mcp) -> None:
         has_phone: Optional[bool] = None,
         has_linkedin: Optional[bool] = None,
         verified_only: bool = False,
-        email_verification_status: Optional[str] = None,
         limit: int = 1000,
         exclude_previously_exported: bool = True,
         email_when_done: bool = False,
@@ -401,7 +399,7 @@ def register(mcp) -> None:
         safe_limit = max(1, min(int(limit or 1000), 500000))
         filters = _filters(q, title, seniority, departments, company_name, company_domain, industry,
                            city, state, country, has_email, has_phone, has_linkedin, verified_only,
-                           email_verification_status, geography=geography, exclude_title=exclude_title)
+                           geography=geography, exclude_title=exclude_title)
         filters["record_type"] = "person"
         try:
             return await backend_call(
@@ -443,14 +441,13 @@ def register(mcp) -> None:
         has_phone: Optional[bool] = None,
         has_linkedin: Optional[bool] = None,
         verified_only: bool = False,
-        email_verification_status: Optional[str] = None,
         record_ids: Optional[list[str]] = None,
         snapshot_total: Optional[int] = None,
     ) -> Dict[str, Any]:
         ident = current_identity()
         filters = _filters(q, title, seniority, departments, company_name, company_domain, industry,
                            city, state, country, has_email, has_phone, has_linkedin, verified_only,
-                           email_verification_status, geography=geography, exclude_title=exclude_title)
+                           geography=geography, exclude_title=exclude_title)
         filters["record_type"] = "person"
         ids = [str(v).strip() for v in (record_ids or []) if str(v).strip()]
         selection_mode = "records" if ids else "filtered"

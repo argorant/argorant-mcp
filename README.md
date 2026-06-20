@@ -1,124 +1,79 @@
-# Argorant Public MCP
+# Argorant MCP
 
-Hosted remote MCP server for Argorant.
+**Verified B2B contact data for AI agents.** Search, count, preview, reveal, export, and build saved lists across **600M+ business contacts** — directly from Claude, ChatGPT, Cursor, and any MCP client.
 
-- MCP endpoint: `https://mcp.argorant.com/mcp`
-- Documentation: `https://argorant.com/docs/mcp/overview`
-- Setup guide: `https://argorant.com/docs/mcp/connect`
-- Tool reference: `https://argorant.com/docs/mcp/tools`
-- ChatGPT setup: `https://argorant.com/docs/mcp/openai`
-- Claude setup: `https://argorant.com/docs/mcp/claude`
-- Security boundaries: `https://argorant.com/docs/mcp/security`
-- Submission checklist: `https://argorant.com/docs/mcp/submission`
+- **MCP endpoint:** `https://mcp.argorant.com/mcp`
+- **Transport:** Streamable HTTP · **Auth:** OAuth 2.1 (Dynamic Client Registration, account-scoped)
+- **Website:** https://argorant.com · **Privacy:** https://argorant.com/privacy · **Terms:** https://argorant.com/terms
 
-This is a hosted remote MCP connector. Claude, ChatGPT, and custom clients that
-support remote MCP should connect to the endpoint directly; no npm package is
-required for that flow. A local package can still be added later as an optional
-bridge, but it should not be required for the public hosted connector.
+This is a **hosted remote connector** — no install, no API key paste. Clients connect to the endpoint and authenticate via OAuth. A standalone CLI also exists (`npx argorant`) for terminal/script use.
 
-The public server uses OAuth and account-scoped access. The first tools are
-read-only by design:
+## Connect
 
-- `search`
-- `fetch`
-- `argorant_account`
-- `argorant_count_people`
-- `argorant_preview_people`
+**Claude** (claude.ai / Desktop): Settings → Connectors → *Add custom connector* → URL `https://mcp.argorant.com/mcp` → complete the OAuth login.
 
-`search` and `fetch` support ChatGPT apps, deep
-research, and other clients that expect data-only search/fetch semantics. They
-return aggregate coverage summaries and capped masked preview rows only.
+**ChatGPT** (Developer Mode): Settings → Apps & Connectors → Advanced → enable Developer Mode → Connectors → *Create* → URL `https://mcp.argorant.com/mcp`. The `search` + `fetch` tools make it usable as a Deep Research connector.
 
-Contact reveal, phone reveal, profile URLs, list creation, and exports are
-disabled by default. Scoped reveal/export tools can only run after OAuth,
-workspace permission, quota, plan, and audit checks. Use the signed-in
-Argorant workspace for normal review and download workflows.
+**Cursor / other MCP clients:** add the remote server from `mcp.json`:
 
-## Directory Readiness
-
-Use the hosted endpoint for public review:
-
-```text
-https://mcp.argorant.com/mcp
+```json
+{
+  "mcpServers": {
+    "argorant": {
+      "url": "https://mcp.argorant.com/mcp"
+    }
+  }
+}
 ```
 
-Before submitting to ChatGPT, Claude, or an MCP directory, verify:
+## Tools
 
-- The endpoint is reachable over public HTTPS.
-- OAuth protected-resource and authorization-server metadata resolve on the MCP host.
-- The connector manifest includes setup, security, privacy, terms, and submission links.
-- Tools are read-only and return only counts, safe safe result links, or masked previews.
-- Raw emails, phone numbers, profile URLs, reveal actions, exports, write actions, and destructive actions remain disabled by default.
-- Reviewers have a normal member account and an owner/admin account for usage-limit testing.
+Free (no credits, masked/aggregate only):
 
-## Discovery
+| Tool | What it does |
+|---|---|
+| `search` / `fetch` | ChatGPT-style coverage search + safe summary (masked previews, counts) |
+| `argorant_account` | Connected account, scopes, limits |
+| `argorant_count_people` | Count matching contacts by role, seniority, dept, industry, geo |
+| `argorant_preview_people` | Masked preview rows (initials, role, company, location) |
 
-Clients should discover OAuth metadata from the MCP host:
+Consume credits (require OAuth scope + permission; verification is live at this step and **only valid/deliverable contacts are billed**):
+
+| Tool | What it does |
+|---|---|
+| `argorant_reveal_people` | Reveal real emails, phones, profile URLs for a small set |
+| `argorant_create_export` / `argorant_export_list` | Async CSV export (large lists) |
+| `argorant_create_list` / `argorant_list_status` | Build & inspect reusable saved lists |
+| `argorant_export_status` / `argorant_export_batch_status` / `argorant_download_export_preview` | Track & fetch exports |
+
+Tools are annotated with read-only vs. action hints. Reveal/export/list actions only run after OAuth, scope, permission, quota, and plan checks; without credits they are blocked by design.
+
+## Data & privacy posture
+
+- **OAuth + account-scoped.** Unauthenticated requests to `/mcp` return `401` with `WWW-Authenticate` pointing at protected-resource metadata.
+- **Masked by default.** `search`/`fetch`/`preview` never return raw emails, phones, or profile URLs — only aggregate coverage and masked rows. Raw contact details require the scoped reveal/export tools and consume credits.
+- **Verification is live.** Emails are verified at reveal/export time; you are billed only for deliverable contacts. Raw verification status is never exposed as a queryable field.
+- **Hosts are separated:** `argorant.com` (marketing/docs), `app.argorant.com` (signed-in app), `mcp.argorant.com` (remote MCP + OAuth).
+
+## OAuth discovery
 
 ```text
 https://mcp.argorant.com/.well-known/oauth-protected-resource
-https://mcp.argorant.com/.well-known/oauth-protected-resource/mcp
 https://mcp.argorant.com/.well-known/oauth-authorization-server
 ```
 
-Unauthenticated requests to `/mcp` return a `401` response with a
-`WWW-Authenticate` header that points to protected-resource metadata.
+Dynamic Client Registration is supported at `/register` (grant types: `authorization_code`, `refresh_token`).
 
-Argorant also publishes a connector manifest for client directories and setup
-flows:
+## Documentation
 
-```text
-https://mcp.argorant.com/manifest.json
-https://mcp.argorant.com/.well-known/argorant-mcp.json
-```
+- Overview: https://argorant.com/docs/mcp/overview
+- Connect guide: https://argorant.com/docs/mcp/connect
+- Tool reference: https://argorant.com/docs/mcp/tools
+- Claude setup: https://argorant.com/docs/mcp/claude · ChatGPT setup: https://argorant.com/docs/mcp/openai
+- Security: https://argorant.com/docs/mcp/security
+- CLI: https://argorant.com/docs/cli
 
-The manifest describes the MCP endpoint, docs, OAuth scopes, safe tools,
-installation mode, and data-exposure defaults. It does not grant access by
-itself.
+## Registry metadata
 
-## Local Service
-
-The production service runs under systemd:
-
-```bash
-systemctl status argorant-public-mcp.service
-systemctl restart argorant-public-mcp.service
-```
-
-The ASGI entrypoint is:
-
-```text
-argorant_mcp.app:app
-```
-
-Default runtime settings come from environment variables in systemd:
-
-- `MCP_PUBLIC_BASE_URL`
-- `MCP_PATH`
-- `ARGORANT_BACKEND_BASE_URL`
-- `ARGORANT_BACKEND_PUBLIC_URL`
-- `ARGORANT_MCP_BRIDGE_SECRET`
-- `MCP_DATABASE_URL`
-
-## Smoke Checks
-
-```bash
-curl -sS https://mcp.argorant.com/ | python3 -m json.tool
-curl -sS https://mcp.argorant.com/manifest.json | python3 -m json.tool
-curl -sS https://mcp.argorant.com/.well-known/argorant-mcp.json | python3 -m json.tool
-curl -sSI https://mcp.argorant.com/mcp
-curl -sS https://mcp.argorant.com/.well-known/oauth-protected-resource | python3 -m json.tool
-curl -sS https://mcp.argorant.com/.well-known/oauth-protected-resource/mcp | python3 -m json.tool
-curl -sS https://mcp.argorant.com/.well-known/oauth-authorization-server | python3 -m json.tool
-```
-
-Expected behavior:
-
-- `/` returns service metadata and links to docs.
-- `/manifest.json` and `/.well-known/argorant-mcp.json` return connector metadata.
-- `/mcp` returns `401` without a bearer token.
-- OAuth discovery endpoints return JSON metadata.
-- App, MCP, and API hosts stay separated:
-  - `argorant.com` for marketing, docs, tools, and research pages.
-  - `app.argorant.com` for login and the signed-in app.
-  - `mcp.argorant.com` for remote MCP and OAuth metadata.
+- `mcp.json` — Open Plugins / Cursor remote-server declaration.
+- `server.json` — official [MCP Registry](https://github.com/modelcontextprotocol/registry) entry (`io.github.argorant/argorant-mcp`, remote streamable-http).

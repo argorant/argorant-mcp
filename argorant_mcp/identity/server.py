@@ -122,8 +122,19 @@ async def register(request: Request) -> JSONResponse:
     if not isinstance(redirect_uris, list) or not redirect_uris:
         return _oauth_error("invalid_redirect_uri", "redirect_uris is required")
     for uri in redirect_uris:
-        if not (uri.startswith("https://") or uri.startswith("http://localhost") or uri.startswith("http://127.0.0.1")):
-            return _oauth_error("invalid_redirect_uri", f"redirect_uri must be https or loopback: {uri}")
+        if uri.startswith("https://") or uri.startswith("http://localhost") or uri.startswith("http://127.0.0.1"):
+            continue
+        # RFC 8252: native apps (Cursor, Grok Bot, VS Code, ...) use private-use
+        # URI schemes like cursor://... as their callback. Rejecting them meant
+        # the OAuth window could never open in desktop MCP clients (found live
+        # 2026-08-19 via Grok Bot: "rejects cursor://"). Exact-match against the
+        # registered list at /authorize still applies, and these clients are
+        # public clients bound to PKCE - the scheme itself is not the secret.
+        import re as _re
+        m = _re.match(r"^([a-zA-Z][a-zA-Z0-9+.\-]*)://\S+$", uri)
+        if m and m.group(1).lower() not in ("http", "javascript", "data", "file", "vbscript"):
+            continue
+        return _oauth_error("invalid_redirect_uri", f"redirect_uri must be https, loopback, or a native app scheme: {uri}")
 
     auth_method = body.get("token_endpoint_auth_method", "none")
     client_id = "mcp-" + _rand(16)

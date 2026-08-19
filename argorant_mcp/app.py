@@ -138,8 +138,13 @@ def _connector_manifest() -> dict:
             },
             {
                 "name": "argorant_count_people",
-                "description": "Count matching B2B contacts by company, title, location, seniority, and department filters.",
+                "description": "Count matching B2B contacts by keywords (preferred, comma=OR), company, title, location, seniority, and department filters.",
                 "data_exposure": "aggregate counts",
+            },
+            {
+                "name": "argorant_company_people",
+                "description": "Count people at one company domain, distinguish total records from business-email coverage, and return a masked role preview.",
+                "data_exposure": "aggregate counts, company metadata, and masked previews",
             },
             {
                 "name": "argorant_preview_people",

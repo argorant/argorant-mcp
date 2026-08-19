@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 from typing import Any, Dict, Optional
+from urllib.parse import quote
 
 import httpx
 
@@ -78,6 +79,13 @@ class BackendClient:
 
     def people_reveal(self, filters: Dict[str, Any], limit: int) -> Dict[str, Any]:
         return self._get_json("/api/mcp/people/reveal", {**filters, "limit": limit})
+
+    def company_people(self, domain: str, filters: Dict[str, Any], limit: int) -> Dict[str, Any]:
+        safe_domain = quote(str(domain or "").strip(), safe="")
+        return self._get_json(
+            f"/api/mcp/companies/{safe_domain}/people",
+            {**filters, "limit": limit},
+        )
 
     def create_export(
         self,

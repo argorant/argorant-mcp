@@ -25,6 +25,7 @@ def _filters(
     company_name: Optional[str],
     company_domain: Optional[str],
     industry: Optional[str],
+    keywords: Optional[str],
     city: Optional[str],
     state: Optional[str],
     country: Optional[str],
@@ -47,6 +48,7 @@ def _filters(
         "company_name": company_name,
         "company_domain": company_domain,
         "industry": industry,
+        "keywords": keywords,
         "city": city,
         "state": state,
         "country": ",".join([v for v in [country, geography] if v]) or None,
@@ -81,6 +83,7 @@ def _compat_filters(query: str) -> Dict[str, Any]:
         company_name=None,
         company_domain=domain,
         industry=None,
+        keywords=None,
         city=None,
         state=None,
         country=None,
@@ -253,7 +256,8 @@ def register(mcp) -> None:
         name="argorant_count_people",
         description=(
             "Count matching B2B contacts in Argorant by company, role, seniority, department, "
-            "industry, or location. Returns aggregate counts only. COST: free. "
+            "industry, keywords, or location. Returns aggregate counts only. COST: free. "
+            "PREFER `keywords` over `industry` for topical targeting: it matches the tags companies actually carry (comma = OR, e.g. keywords='bookkeeping,payroll,accounting') and reliably finds 2-4x more matches than industry labels. Use `industry` only for broad standard sectors, and combine both when in doubt. "
             "`country` accepts individual countries OR regions/geographies — e.g. 'Europe', "
             "'EMEA', 'DACH', 'Nordics', 'Benelux', 'APAC', 'LATAM', 'North America', 'GCC' — "
             "and these can be combined comma-separated; use `geography` as an explicit alias. "
@@ -271,6 +275,7 @@ def register(mcp) -> None:
         company_name: Optional[str] = None,
         company_domain: Optional[str] = None,
         industry: Optional[str] = None,
+        keywords: Optional[str] = None,
         city: Optional[str] = None,
         state: Optional[str] = None,
         country: Optional[str] = None,
@@ -283,7 +288,7 @@ def register(mcp) -> None:
     ) -> Dict[str, Any]:
         ident = current_identity()
         filters = _filters(q, title, seniority, departments, company_name, company_domain, industry,
-                           city, state, country, has_email, has_phone, has_linkedin, verified_only,
+                           keywords, city, state, country, has_email, has_phone, has_linkedin, verified_only,
                            geography=geography, exclude_title=exclude_title)
         try:
             return await backend_call(ident["product_credential"], lambda client: client.people_count(filters))
@@ -291,9 +296,47 @@ def register(mcp) -> None:
             return error_dict(exc)
 
     @mcp.tool(
+        name="argorant_company_people",
+        description=(
+            "Answer the concrete question 'how many people work at this company?' from a company domain. "
+            "Returns the number of person records Argorant has at that domain, the subset with business-email "
+            "coverage, company metadata, and a small masked role preview. This is safer and more reliable than "
+            "putting a domain into free-text search. Raw contact details are not returned. COST: count + preview quota."
+        ),
+        annotations=_READ_OPEN,
+    )
+    async def argorant_company_people(
+        domain: str,
+        title: Optional[str] = None,
+        seniority: Optional[str] = None,
+        departments: Optional[str] = None,
+        country: Optional[str] = None,
+        limit: int = 5,
+    ) -> Dict[str, Any]:
+        ident = current_identity()
+        clean_domain = _extract_domain(domain)
+        if not clean_domain:
+            return error_dict(ToolError("invalid_domain", "Enter a company domain such as stripe.com."))
+        safe_limit = max(1, min(int(limit or 5), 25))
+        filters = {
+            "title": title,
+            "seniority": seniority,
+            "departments": departments,
+            "country": country,
+        }
+        try:
+            return await backend_call(
+                ident["product_credential"],
+                lambda client: client.company_people(clean_domain, filters, safe_limit),
+            )
+        except ToolError as exc:
+            return error_dict(exc)
+
+    @mcp.tool(
         name="argorant_preview_people",
         description=(
             "Preview matching Argorant contacts without revealing personal contact details. "
+            "PREFER `keywords` over `industry` for topical targeting: it matches the tags companies actually carry (comma = OR, e.g. keywords='bookkeeping,payroll,accounting') and reliably finds 2-4x more matches than industry labels. Use `industry` only for broad standard sectors, and combine both when in doubt. "
             "Returns masked initials, role, company, location, departments, and verification status. "
             "Use Argorant after signing in to reveal emails, phone numbers, direct dials, or exports."
         ),
@@ -307,6 +350,7 @@ def register(mcp) -> None:
         company_name: Optional[str] = None,
         company_domain: Optional[str] = None,
         industry: Optional[str] = None,
+        keywords: Optional[str] = None,
         city: Optional[str] = None,
         state: Optional[str] = None,
         country: Optional[str] = None,
@@ -321,7 +365,7 @@ def register(mcp) -> None:
         ident = current_identity()
         safe_limit = max(1, min(int(limit or 5), settings.owner_max_preview))
         filters = _filters(q, title, seniority, departments, company_name, company_domain, industry,
-                           city, state, country, has_email, has_phone, has_linkedin, verified_only,
+                           keywords, city, state, country, has_email, has_phone, has_linkedin, verified_only,
                            geography=geography, exclude_title=exclude_title)
         try:
             return await backend_call(ident["product_credential"], lambda client: client.people_preview(filters, safe_limit))
@@ -345,6 +389,7 @@ def register(mcp) -> None:
         company_name: Optional[str] = None,
         company_domain: Optional[str] = None,
         industry: Optional[str] = None,
+        keywords: Optional[str] = None,
         city: Optional[str] = None,
         state: Optional[str] = None,
         country: Optional[str] = None,
@@ -358,7 +403,7 @@ def register(mcp) -> None:
         ident = current_identity()
         safe_limit = max(1, min(int(limit or 10), 100))
         filters = _filters(q, title, seniority, departments, company_name, company_domain, industry,
-                           city, state, country, True, has_phone, has_linkedin, verified_only,
+                           keywords, city, state, country, True, has_phone, has_linkedin, verified_only,
                            geography=geography, exclude_title=exclude_title)
         try:
             return await backend_call(ident["product_credential"], lambda client: client.people_reveal(filters, safe_limit))
@@ -382,6 +427,7 @@ def register(mcp) -> None:
         company_name: Optional[str] = None,
         company_domain: Optional[str] = None,
         industry: Optional[str] = None,
+        keywords: Optional[str] = None,
         city: Optional[str] = None,
         state: Optional[str] = None,
         country: Optional[str] = None,
@@ -398,7 +444,7 @@ def register(mcp) -> None:
         ident = current_identity()
         safe_limit = max(1, min(int(limit or 1000), 500000))
         filters = _filters(q, title, seniority, departments, company_name, company_domain, industry,
-                           city, state, country, has_email, has_phone, has_linkedin, verified_only,
+                           keywords, city, state, country, has_email, has_phone, has_linkedin, verified_only,
                            geography=geography, exclude_title=exclude_title)
         filters["record_type"] = "person"
         try:
@@ -432,6 +478,7 @@ def register(mcp) -> None:
         company_name: Optional[str] = None,
         company_domain: Optional[str] = None,
         industry: Optional[str] = None,
+        keywords: Optional[str] = None,
         city: Optional[str] = None,
         state: Optional[str] = None,
         country: Optional[str] = None,
@@ -446,7 +493,7 @@ def register(mcp) -> None:
     ) -> Dict[str, Any]:
         ident = current_identity()
         filters = _filters(q, title, seniority, departments, company_name, company_domain, industry,
-                           city, state, country, has_email, has_phone, has_linkedin, verified_only,
+                           keywords, city, state, country, has_email, has_phone, has_linkedin, verified_only,
                            geography=geography, exclude_title=exclude_title)
         filters["record_type"] = "person"
         ids = [str(v).strip() for v in (record_ids or []) if str(v).strip()]

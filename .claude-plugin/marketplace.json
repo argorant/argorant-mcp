@@ -1,0 +1,17 @@
+{
+  "name": "argorant",
+  "owner": {
+    "name": "Argorant",
+    "email": "support@argorant.com"
+  },
+  "metadata": {
+    "description": "Argorant's plugin for Claude. Find buyers, get their contacts and launch campaigns from the chat."
+  },
+  "plugins": [
+    {
+      "name": "argorant",
+      "source": "./plugins/argorant",
+      "description": "Run your entire B2B outreach inside Claude with Argorant."
+    }
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "name": "argorant",
+  "displayName": "Argorant",
+  "version": "1.0.0",
+  "description": "Run your entire B2B outreach inside Claude. Argorant finds the buyers that fit, gets their work emails, writes and launches campaigns from your own mailboxes, and brings the replies back into the chat. Prices are shown first, and nothing is bought or sent without your yes.",
+  "author": {
+    "name": "Argorant",
+    "email": "support@argorant.com",
+    "url": "https://argorant.com"
+  },
+  "homepage": "https://argorant.com",
+  "repository": "https://github.com/argorant/argorant-mcp",
+  "license": "MIT",
+  "keywords": [
+    "sales",
+    "outreach",
+    "prospecting",
+    "lead-generation",
+    "email-campaigns",
+    "b2b"
+  ],
+  "icon": "./icon.png",
+  "documentationUrl": "https://docs.argorant.com",
+  "supportUrl": "https://argorant.com/contact",
+  "privacyPolicyUrl": "https://argorant.com/privacy",
+  "termsOfServiceUrl": "https://argorant.com/terms"
+}

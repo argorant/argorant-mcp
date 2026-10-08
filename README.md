@@ -26,6 +26,12 @@ This is a **hosted remote connector** — no install, no API key paste. Clients 
 }
 ```
 
+## Claude plugin
+
+The folder [`plugins/argorant`](plugins/argorant) holds the Argorant plugin for Claude. It bundles this connector with skills for building a target list, getting contact details, launching a campaign, working the reply inbox, getting sending mailboxes and checking credits. Every step that spends credits, buys something or sends email asks first.
+
+In Claude Code, add it with `claude plugin marketplace add argorant/argorant-mcp` and then `claude plugin install argorant@argorant`.
+
 ## Tools
 
 Free (no credits, masked/aggregate only):

@@ -2,7 +2,7 @@
   "name": "argorant",
   "displayName": "Argorant",
   "version": "1.0.0",
-  "description": "Run your entire B2B outreach inside Claude. Argorant finds the buyers that fit, gets their work emails, writes and launches campaigns from your own mailboxes, and brings the replies back into the chat. Prices are shown first, and nothing is bought or sent without your yes.",
+  "description": "Argorant fills your pipeline from Claude. It finds the buyers that fit, gets their work emails, runs campaigns from your own mailboxes and brings every reply back into the chat. Prices first, nothing bought or sent without your yes.",
   "author": {
     "name": "Argorant",
     "email": "support@argorant.com",

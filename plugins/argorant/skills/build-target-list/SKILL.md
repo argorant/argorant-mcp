@@ -28,6 +28,10 @@ Argorant counts the market, shows example people with names hidden, and saves th
 9. **Grow, never duplicate.** "Add more" or "add the rest" means the same search, or a wider one, into the SAME list_id. Never create a second list for it.
 10. **Manage lists.** `argorant_list_lists` shows every saved list and saved search. `argorant_rename_list` renames one. `argorant_delete_list` deletes one for good, so ask first and pass confirmed=true only after a clear yes.
 
+## Deeper playbooks
+
+To find out who to target first, use the define-icp-and-size-market skill. For exclusions, title matching, keyword scope, dedupe and sizing a list to the mailboxes, use the advanced-list-building skill.
+
 ## Daily limits
 
 Counts, previews and company lookups count toward daily safety limits. They cost nothing and reset every day. If one is reached, say so plainly and suggest continuing tomorrow or narrowing the search.

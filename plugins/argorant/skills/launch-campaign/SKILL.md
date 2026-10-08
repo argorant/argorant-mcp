@@ -38,6 +38,10 @@ Argorant runs the campaign from the user's own mailboxes. A campaign starts as a
 - `argorant_delete_campaign` deletes a draft, paused or stopped campaign with its results. Ask first.
 - Replies are handled in the work-reply-inbox skill.
 
+## Deeper playbooks
+
+For the copy itself use the cold-email-copywriting skill, for personal lines the personalization-at-scale skill, for follow-up timing and keyword branches the sequences-and-subsequences skill, for limits, pacing and bounces the deliverability-and-sending skill, and for results the campaign-analytics-and-optimization skill. Before asking "Launch it now?", offer the copy-reviewer agent for an independent check.
+
 ## What good output looks like
 
 - The emails shown as the recipient will read them, with one example contact filled in.

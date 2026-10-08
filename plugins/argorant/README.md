@@ -20,8 +20,42 @@ This plugin connects Claude to your Argorant account and adds skills that turn A
 - "Find the work email of Jane Doe at acme.com."
 - "Write a 3-email campaign for my list and personalize the first line for each person."
 - "Show me today's interested replies and help me answer them."
+- "Who should I sell to? Here is our website."
+- "Write a 3-step sequence for heads of logistics at manufacturers in DACH and review it before launch."
 
-In Claude Code and Cowork, the commands `/argorant:prospect`, `/argorant:campaign` and `/argorant:replies` start the three main flows directly.
+## Skills, agents and commands
+
+Skills load on their own when a request fits.
+
+| Skill | What it does |
+| --- | --- |
+| define-icp-and-size-market | Turns a website or a one-line offer into segment ideas, counts each for free and picks the best 2 or 3 |
+| build-target-list | Counts a market, previews people with names hidden and saves the search as a list |
+| advanced-list-building | Include and exclude on every filter, title matching, keyword scope, sells-to searches, saved searches, dedupe, valid-only lists and list size planning |
+| get-contacts | Reveals work emails and phones, finds emails for names, exports CSV files and checks your own lists, price first |
+| cold-email-copywriting | Short peer-level emails and 3-step sequences, lowercase subjects, spintax, safe fallbacks, A/B variants and a review checklist |
+| personalization-at-scale | A personal line per contact from facts that were looked up, 5 examples first, fallback for the rest |
+| sequences-and-subsequences | Follow-up timing, same-thread follow-ups, stop on reply and keyword-triggered branches |
+| launch-campaign | Sets up the campaign, adds people and mailboxes, checks it and launches on your yes |
+| deliverability-and-sending | Mailbox capacity, daily limits, pacing, warm-up as your choice, bounce protection and clean lists |
+| campaign-analytics-and-optimization | Reads results, finds the weak link and tests one change at a time |
+| work-reply-inbox | Interested replies first, full threads, answers and forwards after your yes, labels and blocklist |
+| reply-handling-playbook | Answers by kind of reply, objection templates, meeting booking and handing over to a colleague |
+| get-mailboxes | Connects your mailboxes or orders new ones on new domains after a full quote |
+| account-and-credits | Credits, daily limits, credit packs through a payment link and webhooks |
+
+Two agents help in the background. lead-researcher researches one contact or company from public facts and suggests a personal line with its source. copy-reviewer checks a sequence against the copywriting rules and the merge field and placeholder rules before launch. Both only read and never change anything.
+
+In Claude Code and Cowork, six commands start the main flows directly.
+
+| Command | What it starts |
+| --- | --- |
+| /argorant:icp | Ranked segments with real counts from a website or an offer |
+| /argorant:prospect | A counted, previewed and saved lead list |
+| /argorant:write-sequence | A reviewed 3-step sequence |
+| /argorant:personalize | A personal line for every contact in a campaign |
+| /argorant:campaign | A full campaign, launched only on your yes |
+| /argorant:replies | Interested replies with draft answers |
 
 ## Setup
 

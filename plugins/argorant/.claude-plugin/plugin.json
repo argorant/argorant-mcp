@@ -1,7 +1,7 @@
 {
   "name": "argorant",
   "displayName": "Argorant",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Argorant fills your pipeline from Claude. It finds the buyers that fit, gets their work emails, runs campaigns from your own mailboxes and brings every reply back into the chat. Prices first, nothing bought or sent without your yes.",
   "author": {
     "name": "Argorant",

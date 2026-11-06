@@ -1,0 +1,24 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
+  "name": "argorant",
+  "version": "1.0.0",
+  "description": "Argorant from your agent: find leads, check every email, write and send campaigns, sort replies. Connects to Argorant's hosted MCP server with your own Argorant account.",
+  "author": {
+    "name": "Argorant",
+    "email": "support@argorant.com",
+    "url": "https://argorant.com"
+  },
+  "homepage": "https://argorant.com/hermes-agent",
+  "repository": "https://github.com/argorant/argorant-mcp",
+  "license": "MIT",
+  "keywords": ["leads", "b2b", "prospecting", "email", "cold-email", "outbound", "sales", "campaigns", "mcp"],
+  "extensions": {
+    "com.nousresearch.hermes": {
+      "servers": {
+        "argorant": {
+          "trust": "untrusted"
+        }
+      }
+    }
+  }
+}

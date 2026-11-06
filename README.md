@@ -39,6 +39,10 @@ The folder [`plugins/argorant`](plugins/argorant) holds the Argorant plugin for 
 
 In Claude Code, add it with `claude plugin marketplace add argorant/argorant-mcp` and then `claude plugin install argorant@argorant`.
 
+## Hermes Agent plugin
+
+The folder [`plugins/agent-plugin`](plugins/agent-plugin) holds the Argorant package for Hermes Agent and other Agent Plugins v1 hosts: the connector, the browser sign-in and a skill that says which tool answers which question and what needs your yes first. Setup steps are in its [README](plugins/agent-plugin/README.md).
+
 ## Try it
 
 - "How many heads of procurement work at manufacturers in Germany?"

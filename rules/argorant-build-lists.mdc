@@ -1,0 +1,19 @@
+---
+title: Argorant - size the market before you spend
+description: Use when the user describes who they sell to or asks for leads, prospects or a target list with Argorant. Count first, preview, save the list, and spend credits only on the people the user approves.
+alwaysApply: false
+---
+
+# Size the market before you spend
+
+Follow this order when someone asks for leads.
+
+1. Count. Turn the request into filters (job title, seniority, department, industry, keywords for what the company does, place, company size) and call `argorant_count_people`. It is free. Say the number in plain words: it counts people, not companies.
+2. Preview. Call `argorant_preview_people` with the same filters. Names are hidden. Check that the jobs and companies fit. If they do not, change the filters and count again. Use the exclude filters for roles, industries or countries the user does not want.
+3. Save. Call `argorant_create_list` with the same filters to save the whole search as a private list. Saving is free. To grow a list later, pass its `list_id` instead of making a second list.
+4. Spend only after a yes. Contact details come from `argorant_reveal_people` (a small group), `argorant_create_export` (a file) or `argorant_add_campaign_leads` (straight into a campaign). Each person with a new working email costs 1 credit, and people this account already unlocked are free. Phone numbers are only added when asked for.
+
+Good habits:
+- Start with a small batch so the user sees the quality before a large spend.
+- One person at one company: use `argorant_find_email` with first name, last name and company domain.
+- A company on its own: `argorant_company_people` shows how many people Argorant has there, free.

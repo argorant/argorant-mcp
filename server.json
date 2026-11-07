@@ -1,9 +1,31 @@
 {
   "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
-  "name": "io.github.argorant/argorant-mcp",
-  "description": "Verified B2B contact data for AI agents: search, count, preview, reveal, export, and saved lists across 600M+ business contacts. Hosted remote server, OAuth, account-scoped.",
-  "version": "1.0.0",
-  "websiteUrl": "https://argorant.com",
+  "name": "com.argorant/argorant",
+  "title": "Argorant",
+  "description": "Find B2B leads, check every email, write and send campaigns and sort replies from your own AI.",
+  "version": "1.1.0",
+  "websiteUrl": "https://argorant.com/ai-agents",
+  "repository": {
+    "url": "https://github.com/argorant/argorant-mcp",
+    "source": "github",
+    "id": "1271443028"
+  },
+  "icons": [
+    {
+      "src": "https://argorant.com/argorant-avatar-512.png",
+      "mimeType": "image/png",
+      "sizes": [
+        "512x512"
+      ]
+    },
+    {
+      "src": "https://argorant.com/icon-192.png",
+      "mimeType": "image/png",
+      "sizes": [
+        "192x192"
+      ]
+    }
+  ],
   "remotes": [
     {
       "type": "streamable-http",

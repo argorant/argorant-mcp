@@ -1,5 +1,9 @@
 # Argorant for Claude, ChatGPT and other AI assistants
 
+[![Argorant MCP connector](https://glama.ai/mcp/connectors/com.argorant/argorant/badges/score.svg)](https://glama.ai/mcp/connectors/com.argorant/argorant)
+
+Find leads, check every email, write and send campaigns, sort replies, from the app or from your own AI.
+
 Argorant fills your sales pipeline from the chat. Describe who you sell to, and Argorant finds the companies and people that fit among over 600 million business contacts, gets their work emails, runs campaigns from your own mailboxes and brings every reply back into the conversation.
 
 Prices are shown first. Nothing is bought, sent, cancelled or deleted without your yes.
@@ -21,7 +25,9 @@ This repository holds the Argorant connector (a hosted remote MCP server at `htt
 
 **ChatGPT.** Open Settings, Apps and Connectors, Advanced, turn on Developer Mode, then create a connector with `https://mcp.argorant.com/mcp` and sign in.
 
-**Cursor and other MCP clients.** Add the server from `mcp.json`.
+**Cursor.** Add the server from `mcp.json`. This repo is also a Cursor plugin (skills, agents, commands and the connector).
+
+**Other MCP clients.** Add `https://mcp.argorant.com/mcp` and sign in with OAuth.
 
 ```json
 {
@@ -74,5 +80,7 @@ Read more in the privacy policy at https://argorant.com/privacy and the terms at
 
 - Sign-in discovery is at `https://mcp.argorant.com/.well-known/oauth-protected-resource` and `https://mcp.argorant.com/.well-known/oauth-authorization-server`. Dynamic client registration is supported.
 - `mcp.json` declares the remote server for Cursor and other clients that read that format.
-- `server.json` is the entry for the official MCP Registry (`io.github.argorant/argorant-mcp`, remote streamable HTTP).
+- `server.json` is the entry for the official MCP Registry (`com.argorant/argorant`, remote streamable HTTP, OAuth sign-in).
+- `.cursor-plugin/` and `rules/` let Cursor and cursor.directory find the plugin in `plugins/argorant` and the Argorant rules.
+- The REST API is described in OpenAPI at https://docs.argorant.com/openapi.json.
 - `argorant_mcp/` holds the connector's source.

@@ -1,0 +1,37 @@
+{
+  "name": "argorant",
+  "owner": {
+    "name": "Argorant",
+    "email": "support@argorant.com"
+  },
+  "metadata": {
+    "description": "Argorant for Cursor: find leads, check every email, write and send campaigns and sort replies from your own AI.",
+    "version": "1.1.0"
+  },
+  "plugins": [
+    {
+      "name": "argorant",
+      "source": "plugins/argorant",
+      "description": "Find leads, check every email, write and send campaigns and sort replies, from the app or from your own AI. Prices first, nothing bought or sent without your yes.",
+      "version": "1.1.0",
+      "author": {
+        "name": "Argorant",
+        "email": "support@argorant.com"
+      },
+      "homepage": "https://argorant.com",
+      "repository": "https://github.com/argorant/argorant-mcp",
+      "license": "MIT",
+      "keywords": [
+        "sales",
+        "outreach",
+        "prospecting",
+        "lead-generation",
+        "email-campaigns",
+        "b2b",
+        "mcp"
+      ],
+      "logo": "icon.png",
+      "mcpServers": ".mcp.json"
+    }
+  ]
+}

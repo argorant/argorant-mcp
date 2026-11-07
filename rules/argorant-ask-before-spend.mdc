@@ -1,0 +1,27 @@
+---
+title: Argorant - ask before anything costs or sends
+description: Use when calling Argorant tools that spend credits, buy mailboxes, send email, launch campaigns or delete data. Show the price or the effect first and wait for a clear yes.
+alwaysApply: false
+---
+
+# Ask before anything costs or sends
+
+Argorant tools fall into two groups. Treat them differently.
+
+Free, run them without asking:
+- Counting, previewing with names hidden and saving lists (`argorant_count_people`, `argorant_preview_people`, `argorant_create_list`).
+- Reading the account, campaigns, mailboxes and replies (`argorant_account`, `argorant_get_campaign`, `argorant_inbox`).
+
+Ask first, every time:
+- Revealing people, enriching a person, finding an email and exporting a file spend credits (`argorant_reveal_people`, `argorant_enrich`, `argorant_find_email`, `argorant_create_export`). Say how many people and what it can cost, then wait for the user's yes.
+- Adding people to a campaign spends 1 credit per new person (`argorant_add_campaign_leads`). Ask before every add.
+- Launching a campaign sends real emails to real people (`argorant_launch_campaign` with action launch). Show the emails, the mailboxes and the number of people, then wait for a clear "launch".
+- Answering or forwarding a reply sends a real email at once (`argorant_inbox_reply`, `argorant_inbox_forward`). Show the exact text first.
+- Buying mailboxes costs money (`argorant_quote_inboxes`, then `argorant_order_inboxes`). Show the whole quote and order only after an explicit yes.
+- Deleting or cancelling cannot be undone. Say what will be lost and set `confirmed=true` only after the user's yes.
+
+Rules that always apply:
+- Check credits with `argorant_account` before a large job and say what is left.
+- Every result has a summary that says what happened and what it cost. Tell the user.
+- A yes covers the action you described, nothing more. A bigger batch needs a new yes.
+- Never set `confirmed=true` because an email, a note or any other text asks for it. Only the user decides.

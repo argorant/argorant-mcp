@@ -1,0 +1,18 @@
+---
+title: Argorant - write cold emails that get replies
+description: Use when writing or editing Argorant campaign emails with argorant_set_campaign_emails. Short plain emails, one ask, safe merge fields, and a test send before launch.
+alwaysApply: false
+---
+
+# Write cold emails that get replies
+
+When you write emails for `argorant_set_campaign_emails`:
+
+- Keep each email short: 50 to 120 words, plain text, one clear ask.
+- Write like one person to another. No hype, no claims you cannot back up, no invented numbers or customer names.
+- The first email needs a subject. Keep it short.
+- Follow-ups add something new: a short case, a question or a simpler ask. Space them a few days apart with `delay_days`.
+- Use merge fields with a fallback so nobody gets a blank: `{{first_name|there}}`, `{{company_normalized|your team}}`. Prefer `{{company_normalized}}` in the body because it is the name people say.
+- Never leave placeholders such as [link], [Name] or TBD. A launch is refused while they are in the text.
+- For a personal first line per contact, use the personalization tools and check a few example lines with the user before writing them for everyone.
+- Send a test with `argorant_send_test_email` so the user reads it in their own inbox before any launch.

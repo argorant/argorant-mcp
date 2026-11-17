@@ -1,0 +1,8 @@
+description = "Build a lead list with Argorant from a plain description of who you sell to. Free."
+prompt = """
+Use Argorant to build a lead list for this request: {{args}}
+
+If the request is empty, ask in one sentence who the user sells to (job, industry, place).
+
+Count the matching people, show a preview of 5 to 10 people with names hidden, and offer to save the whole search as a list. All of this is free. Do not reveal contact details or spend credits in this command. If the user wants contacts next, say what it costs and wait for a clear yes.
+"""

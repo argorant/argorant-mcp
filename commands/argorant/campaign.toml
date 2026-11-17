@@ -1,0 +1,8 @@
+description = "Draft an Argorant email campaign for a list and launch it only after your clear yes."
+prompt = """
+Use Argorant to draft an email campaign for this request: {{args}}
+
+If the request is empty, ask in one sentence which list or audience to write for and what the user offers.
+
+Create the campaign as a draft. Write a short first email and two follow-ups, give every variable a fallback for contacts where the value is missing, and show the emails as one contact will read them. Before adding people, say the most it can cost in credits and wait for a yes. Check the campaign for problems, sum it up and ask "Launch it now?". Launch only after the user's clear yes in this chat.
+"""

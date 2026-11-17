@@ -1,0 +1,8 @@
+description = "Turn a website or a one-line offer into ranked target segments with Argorant counts. Free."
+prompt = """
+Use Argorant to size the market for this offer: {{args}}
+
+If the request is empty, ask in one sentence for the website or a one-line description of what the user sells.
+
+Write 4 to 6 segment ideas (job, industry, place, company size). Count each with Argorant, preview 10 people with names hidden for the promising ones, and fix wrong matches with excludes. Show one ranked table with the counts and a one-line reason each, then recommend the best 2 or 3. All of this is free. Do not reveal contacts, spend credits or save lists in this command. End by offering to save the chosen segments as lists.
+"""

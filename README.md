@@ -49,6 +49,25 @@ In Claude Code, add it with `claude plugin marketplace add argorant/argorant-mcp
 
 The folder [`plugins/agent-plugin`](plugins/agent-plugin) holds the Argorant package for Hermes Agent and other Agent Plugins v1 hosts: the connector, the browser sign-in and a skill that says which tool answers which question and what needs your yes first. Setup steps are in its [README](plugins/agent-plugin/README.md).
 
+## Gemini CLI
+
+This repository is also a Gemini CLI extension. It adds the Argorant connector, a short guide for the model and four commands.
+
+```bash
+gemini extensions install https://github.com/argorant/argorant-mcp
+```
+
+Start Gemini CLI and sign in with your Argorant account when the browser opens, or at any time with `/mcp auth argorant`.
+
+- `/argorant:find-leads` builds a lead list from a plain description of who you sell to.
+- `/argorant:size-market` turns your website or offer into ranked target segments with counts.
+- `/argorant:campaign` drafts a campaign and launches it only after your yes.
+- `/argorant:replies` shows interested replies and drafts answers in the same thread.
+
+Searching, counting and previews are free. Revealing contacts and adding people to a campaign spend credits, and launching or answering sends real email, so Argorant asks you first.
+
+Update with `gemini extensions update argorant` and remove with `gemini extensions uninstall argorant`.
+
 ## Try it
 
 - "How many heads of procurement work at manufacturers in Germany?"

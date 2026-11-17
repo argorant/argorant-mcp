@@ -1,0 +1,15 @@
+{
+  "name": "argorant",
+  "version": "1.1.0",
+  "description": "Find B2B leads, get their work emails, write and send campaigns and sort replies from Gemini CLI. Prices first, nothing bought or sent without your yes.",
+  "contextFileName": "GEMINI.md",
+  "mcpServers": {
+    "argorant": {
+      "type": "http",
+      "url": "https://mcp.argorant.com/mcp",
+      "oauth": {
+        "enabled": true
+      }
+    }
+  }
+}
